@@ -37,9 +37,13 @@ function wp_login_protector()
         }
         if( empty($_GET[$wp_login_protector_url_param]) )
         {
-            setcookie($wp_login_protector_cookie_name, '1', time()+3600, '/');
-            wp_redirect( get_bloginfo( 'url' ) . '/wp-login.php?wp_login_protector=1' );
-            die();
+            if (empty($_SERVER['HTTP_USER_AGENT'])) {
+                header('HTTP/1.1 404 Not Found');
+            } else {
+                setcookie($wp_login_protector_cookie_name, '1', time()+3600, '/');
+                wp_redirect( get_bloginfo( 'url' ) . '/wp-login.php?wp_login_protector=1' );
+                die();
+            }
         }
         else {
             header('HTTP/1.1 403 Forbidden');
